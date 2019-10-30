@@ -1,9 +1,17 @@
-import React, {Component} from 'react';
-import {Text, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import React, { Component } from 'react';
+import { Text, View, Image, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 class Main extends Component {
   // apresentar a lista de eventos
+
+  static navigationOptions = {
+    tabBarIcon: () => (
+      <Image source={require('../assets/img/calendar.png')}
+        style={styles.tabBarNavigatorIcon}
+      />
+    ),
+  };
 
   constructor() {
     super();
@@ -19,7 +27,7 @@ class Main extends Component {
   _carregarEventos = async () => {
     await fetch('http://192.168.7.85:5000/api/eventos')
       .then(resposta => resposta.json())
-      .then(data => this.setState({eventos: data}))
+      .then(data => this.setState({ eventos: data }))
       .catch(erro => console.warn(erro));
   };
 
@@ -28,7 +36,7 @@ class Main extends Component {
       <FlatList
         data={this.state.eventos}
         keyExtractor={item => item.idEvento}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View>
             <Text>{item.titulo}</Text>
             <Text>{item.dataEvento}</Text>
@@ -38,5 +46,9 @@ class Main extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  tabBarNavigatorIcon: { width: 25, height: 25, tintColor: 'white' }
+});
 
 export default Main;
